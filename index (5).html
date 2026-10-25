@@ -1,0 +1,1447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Renewable Energy | EDA Mini Project</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+:root {
+    --green: #147d64;
+    --dark: #123b35;
+    --light: #e9f8f0;
+    --blue: #e9f3ff;
+    --orange: #ffbd69;
+    --white: #ffffff;
+    --text: #243b38;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f3f8f5;
+    color: var(--text);
+    line-height: 1.8;
+}
+
+header {
+    background: linear-gradient(135deg, #103e35, #16876b);
+    color: white;
+    padding: 48px 20px;
+    text-align: center;
+}
+
+header .tag {
+    display: inline-block;
+    background: #ffffff20;
+    padding: 6px 16px;
+    border-radius: 25px;
+    margin-bottom: 15px;
+}
+
+header h1 {
+    font-size: clamp(27px, 5vw, 45px);
+    line-height: 1.3;
+    margin-bottom: 18px;
+}
+
+header p {
+    max-width: 760px;
+    margin: auto;
+}
+
+nav {
+    background: #0d302b;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+}
+
+nav a:hover {
+    background: #247c66;
+}
+
+.container {
+    width: min(1100px, 92%);
+    margin: 30px auto;
+}
+
+.card {
+    background: white;
+    border-radius: 16px;
+    padding: 26px;
+    margin-bottom: 25px;
+    box-shadow: 0 5px 20px #183e3510;
+    border: 1px solid #e1eee6;
+    overflow-wrap: anywhere;
+}
+
+.card h2 {
+    color: var(--green);
+    margin-bottom: 16px;
+    font-size: 24px;
+}
+
+.card h3 {
+    color: var(--dark);
+    margin: 15px 0 8px;
+}
+
+.card ul, .card ol {
+    padding-left: 24px;
+}
+
+.cover {
+    text-align: center;
+    background: linear-gradient(135deg, #ffffff, #e2f7ec);
+    border: 2px solid #b8e8d1;
+}
+
+.cover .symbol {
+    font-size: 60px;
+}
+
+.cover h2 {
+    font-size: 29px;
+    color: var(--dark);
+}
+
+.details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-top: 25px;
+    text-align: left;
+}
+
+.detail {
+    background: white;
+    padding: 14px;
+    border-radius: 10px;
+    border: 1px solid #d8e9df;
+}
+
+.highlight {
+    background: var(--light);
+    border-left: 5px solid var(--green);
+    padding: 16px;
+    border-radius: 8px;
+    margin: 15px 0;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.stat {
+    background: white;
+    border: 1px solid #d8e9df;
+    padding: 20px;
+    border-radius: 14px;
+    text-align: center;
+}
+
+.stat strong {
+    display: block;
+    font-size: 25px;
+    color: var(--green);
+}
+
+.stat span {
+    font-size: 13px;
+}
+
+.chart-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.chart-box {
+    background: white;
+    padding: 18px;
+    border: 1px solid #dcebe2;
+    border-radius: 14px;
+    min-width: 0;
+}
+
+.chart-box h3 {
+    font-size: 17px;
+    margin-bottom: 15px;
+}
+
+.chart-box canvas {
+    max-height: 300px;
+}
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 500px;
+}
+
+th, td {
+    border: 1px solid #dbe8df;
+    padding: 11px;
+    text-align: left;
+}
+
+th {
+    background: #dff3e8;
+    color: #123b35;
+}
+
+tr:nth-child(even) {
+    background: #f7fbf8;
+}
+
+code {
+    font-family: Consolas, monospace;
+}
+
+pre {
+    background: #10241f;
+    color: #d8f7e5;
+    padding: 22px;
+    border-radius: 12px;
+    overflow-x: auto;
+    white-space: pre;
+    line-height: 1.65;
+    font-size: 13px;
+    margin-top: 15px;
+}
+
+.note {
+    font-size: 14px;
+    color: #586d64;
+}
+
+footer {
+    text-align: center;
+    padding: 35px 15px;
+    background: #103e35;
+    color: white;
+}
+
+footer p {
+    margin: 5px;
+}
+
+@media print {
+    nav, .no-print {
+        display: none !important;
+    }
+
+    body {
+        background: white;
+    }
+
+    .card {
+        box-shadow: none;
+        break-inside: avoid;
+    }
+
+    pre {
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        font-size: 9px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="tag">ARTIFICIAL INTELLIGENCE & DATA SCIENCE</div>
+    <h1>Exploratory Data Analysis of Global Renewable Energy Trends</h1>
+    <p>
+        Understanding clean energy generation through data analysis,
+        statistical methods, Python programming and visualization.
+    </p>
+    <p style="margin-top:20px;font-size:19px;">
+        🌍 Clean Energy • 📊 Data Science • 🌱 Sustainable Future
+    </p>
+</header>
+
+<nav>
+    <a href="#cover">Cover</a>
+    <a href="#abstract">Abstract</a>
+    <a href="#introduction">Introduction</a>
+    <a href="#objectives">Objectives</a>
+    <a href="#dataset">Dataset</a>
+    <a href="#methodology">Methodology</a>
+    <a href="#analysis">Analysis</a>
+    <a href="#charts">Charts</a>
+    <a href="#python">Python Code</a>
+    <a href="#findings">Findings</a>
+    <a href="#conclusion">Conclusion</a>
+</nav>
+
+<main class="container">
+
+<!-- 1. COVER PAGE -->
+
+<section class="card cover" id="cover">
+    <div class="symbol">🌍 ⚡ 🌱</div>
+
+    <p><strong>MINI PROJECT REPORT</strong></p>
+
+    <h2>
+        Exploratory Data Analysis of Global Renewable Energy Trends
+    </h2>
+
+    <p>
+        A data-driven study of renewable energy generation,
+        country-wise comparisons and changes over time.
+    </p>
+
+    <div class="details">
+        <div class="detail">
+            <strong>Submitted By</strong><br>
+            S. Pravanjana Kasthuri
+        </div>
+
+        <div class="detail">
+            <strong>Register Number</strong><br>
+            951025243014
+        </div>
+
+        <div class="detail">
+            <strong>Department</strong><br>
+            Artificial Intelligence and Data Science
+        </div>
+
+        <div class="detail">
+            <strong>College</strong><br>
+            Infant Jesus College of Engineering
+        </div>
+
+        <div class="detail">
+            <strong>Subject</strong><br>
+            Exploratory Data Analysis
+        </div>
+
+        <div class="detail">
+            <strong>Academic Year</strong><br>
+            2026–2027
+        </div>
+    </div>
+
+    <p style="margin-top:25px;">
+        <strong>Project Theme:</strong>
+        Data Science for a Sustainable Planet
+    </p>
+</section>
+
+<!-- 2. ABSTRACT -->
+
+<section class="card" id="abstract">
+    <h2>2. Abstract</h2>
+
+    <p>
+        Renewable energy plays an important role in reducing dependence
+        on fossil fuels and supporting sustainable development.
+        Solar, wind, hydroelectric, biomass and geothermal energy are
+        important sources of renewable electricity and heat.
+    </p>
+
+    <p>
+        This project demonstrates Exploratory Data Analysis (EDA)
+        techniques for studying renewable energy generation across
+        countries and years. The project explains data collection,
+        data cleaning, descriptive statistics, visualization and
+        interpretation using Python libraries such as Pandas,
+        NumPy, Matplotlib and Seaborn.
+    </p>
+
+    <p>
+        Bar charts, line charts, pie charts and correlation analysis
+        can help identify patterns, compare energy sources and
+        communicate results clearly. The analysis can support further
+        investigation into clean energy development.
+    </p>
+
+    <div class="highlight">
+        <strong>Keywords:</strong>
+        Exploratory Data Analysis, Renewable Energy, Python,
+        Pandas, Data Visualization, Sustainability.
+    </div>
+</section>
+
+<!-- 3. INTRODUCTION -->
+
+<section class="card" id="introduction">
+    <h2>3. Introduction</h2>
+
+    <p>
+        Exploratory Data Analysis is the process of examining a dataset
+        before applying advanced statistical or machine learning
+        methods. It helps us understand the structure of data,
+        discover patterns, detect missing values and identify
+        relationships between variables.
+    </p>
+
+    <p>
+        Renewable energy comes from sources that are naturally
+        replenished. These sources include sunlight, wind, flowing
+        water, organic materials and heat from within the Earth.
+    </p>
+
+    <h3>Why is this topic important?</h3>
+
+    <ul>
+        <li>Renewable energy is important for sustainable development.</li>
+        <li>Data analysis helps compare energy sources.</li>
+        <li>Historical data can reveal changes over time.</li>
+        <li>Visualizations make complex information easier to understand.</li>
+        <li>Data-driven findings can support better energy planning.</li>
+    </ul>
+
+    <h3>Role of Data Science</h3>
+
+    <p>
+        Data science combines programming, statistics and visualization
+        to extract useful information from datasets. In this project,
+        these techniques are applied to renewable energy data to
+        demonstrate a practical application of EDA.
+    </p>
+</section>
+
+<!-- 4. PROBLEM STATEMENT -->
+
+<section class="card" id="problem">
+    <h2>4. Problem Statement</h2>
+
+    <p>
+        Renewable energy datasets may contain information from
+        different countries, years and energy sources. Understanding
+        these records manually can be difficult.
+    </p>
+
+    <p>
+        The problem is to organize, clean, summarize and visualize
+        renewable energy data so that differences between countries,
+        changes over time and relationships among numerical variables
+        can be examined systematically.
+    </p>
+</section>
+
+<!-- 5. OBJECTIVES -->
+
+<section class="card" id="objectives">
+    <h2>5. Objectives</h2>
+
+    <ol>
+        <li>Understand the structure of a renewable energy dataset.</li>
+        <li>Identify missing values and duplicate records.</li>
+        <li>Prepare the data for analysis using Python.</li>
+        <li>Calculate descriptive statistical measures.</li>
+        <li>Compare renewable energy generation across countries.</li>
+        <li>Study changes in energy generation over time.</li>
+        <li>Create meaningful charts and visualizations.</li>
+        <li>Summarize the observations and limitations of the analysis.</li>
+    </ol>
+</section>
+
+<!-- 6. DATASET -->
+
+<section class="card" id="dataset">
+    <h2>6. Dataset Description</h2>
+
+    <p>
+        The intended dataset contains renewable energy generation
+        information for different countries and years.
+        A suitable real dataset can be obtained from a public
+        source such as Our World in Data.
+    </p>
+
+    <p>
+        <strong>Suggested source:</strong>
+        <a href="https://ourworldindata.org/renewable-energy"
+           target="_blank" rel="noopener">
+           Our World in Data — Renewable Energy
+        </a>
+    </p>
+
+    <div class="highlight">
+        <strong>Important:</strong>
+        The charts displayed in this website use a small illustrative
+        example dataset created for demonstration. They are not
+        verified global statistics. Replace the example values with
+        actual data before presenting the findings as real-world results.
+    </div>
+
+    <h3>Dataset Variables</h3>
+
+    <div class="table-wrap">
+        <table>
+            <tr>
+                <th>Variable</th>
+                <th>Description</th>
+                <th>Data Type</th>
+            </tr>
+            <tr>
+                <td>Country</td>
+                <td>Name of the country</td>
+                <td>Categorical</td>
+            </tr>
+            <tr>
+                <td>Year</td>
+                <td>Year of observation</td>
+                <td>Numerical / Time</td>
+            </tr>
+            <tr>
+                <td>Solar_TWh</td>
+                <td>Solar energy generation</td>
+                <td>Numerical</td>
+            </tr>
+            <tr>
+                <td>Wind_TWh</td>
+                <td>Wind energy generation</td>
+                <td>Numerical</td>
+            </tr>
+            <tr>
+                <td>Hydro_TWh</td>
+                <td>Hydroelectric energy generation</td>
+                <td>Numerical</td>
+            </tr>
+            <tr>
+                <td>Biomass_TWh</td>
+                <td>Biomass energy generation</td>
+                <td>Numerical</td>
+            </tr>
+            <tr>
+                <td>Geothermal_TWh</td>
+                <td>Geothermal energy generation</td>
+                <td>Numerical</td>
+            </tr>
+        </table>
+    </div>
+
+    <p class="note">
+        TWh means terawatt-hour, a unit used to measure energy.
+        Actual public datasets may use different variable names
+        or different units.
+    </p>
+</section>
+
+<!-- 7. TOOLS -->
+
+<section class="card" id="tools">
+    <h2>7. Software and Libraries Used</h2>
+
+    <h3>Python</h3>
+    <p>
+        Python is a programming language commonly used for
+        data analysis, scientific computing and machine learning.
+    </p>
+
+    <h3>Pandas</h3>
+    <p>
+        Pandas provides data structures and functions for loading,
+        cleaning, filtering and summarizing tabular data.
+    </p>
+
+    <h3>NumPy</h3>
+    <p>
+        NumPy supports numerical calculations and array operations.
+    </p>
+
+    <h3>Matplotlib</h3>
+    <p>
+        Matplotlib is used to create bar charts, line charts
+        and other visualizations.
+    </p>
+
+    <h3>Seaborn</h3>
+    <p>
+        Seaborn helps create statistical graphics and correlation
+        heatmaps.
+    </p>
+
+    <h3>SPCK Editor</h3>
+    <p>
+        SPCK is used to create and preview this HTML project website
+        on a mobile device. Python analysis requires a Python
+        environment such as Google Colab or Jupyter Notebook.
+    </p>
+</section>
+
+<!-- 8. METHODOLOGY -->
+
+<section class="card" id="methodology">
+    <h2>8. Methodology</h2>
+
+    <h3>Step 1: Data Collection</h3>
+    <p>
+        Obtain a renewable energy dataset from a reliable public
+        source and record its source, units and coverage.
+    </p>
+
+    <h3>Step 2: Data Inspection</h3>
+    <p>
+        Examine column names, data types, number of rows,
+        sample records and summary information.
+    </p>
+
+    <h3>Step 3: Data Cleaning</h3>
+    <p>
+        Check missing values, remove exact duplicate records
+        when appropriate, correct data types and examine
+        unusual observations.
+    </p>
+
+    <h3>Step 4: Statistical Analysis</h3>
+    <p>
+        Calculate mean, median, standard deviation and other
+        useful descriptive statistics.
+    </p>
+
+    <h3>Step 5: Data Visualization</h3>
+    <p>
+        Create charts to compare countries, understand trends
+        and examine relationships among numerical variables.
+    </p>
+
+    <h3>Step 6: Interpretation</h3>
+    <p>
+        Explain the patterns shown by the actual dataset.
+        Avoid claiming that a relationship proves causation.
+    </p>
+</section>
+
+<!-- 9. DATA CLEANING -->
+
+<section class="card" id="cleaning">
+    <h2>9. Data Cleaning</h2>
+
+    <p>
+        Data cleaning improves the quality and consistency
+        of a dataset before analysis.
+    </p>
+
+    <ul>
+        <li>Inspect missing values in each column.</li>
+        <li>Identify exact duplicate records.</li>
+        <li>Convert numerical columns into numeric data types.</li>
+        <li>Check that year values are valid.</li>
+        <li>Check for negative or implausible energy values.</li>
+        <li>Keep track of any records removed or modified.</li>
+    </ul>
+
+    <div class="highlight">
+        Missing values should not automatically be replaced with zero.
+        A missing value may mean that information was unavailable,
+        rather than that energy generation was zero.
+    </div>
+</section>
+
+<!-- 10. ANALYSIS -->
+
+<section class="card" id="analysis">
+    <h2>10. Statistical Analysis</h2>
+
+    <h3>Mean</h3>
+    <p>
+        The mean is calculated by dividing the sum of all observations
+        by the number of observations.
+    </p>
+
+    <p><strong>Mean = Sum of observations / Number of observations</strong></p>
+
+    <h3>Median</h3>
+    <p>
+        The median is the middle value after observations are arranged
+        in order. It is useful when data contain extreme values.
+    </p>
+
+    <h3>Standard Deviation</h3>
+    <p>
+        Standard deviation describes how widely numerical values
+        are spread around their mean.
+    </p>
+
+    <h3>Correlation</h3>
+    <p>
+        Correlation measures the strength and direction of a
+        linear relationship between two numerical variables.
+        Correlation does not by itself establish causation.
+    </p>
+
+    <h3>Grouping and Comparison</h3>
+    <p>
+        Grouping records by country, year or energy source helps
+        compare generation patterns and identify areas for further study.
+    </p>
+</section>
+
+<!-- 11. VISUALIZATIONS -->
+
+<section class="card" id="charts">
+    <h2>11. Data Visualization</h2>
+
+    <p>
+        The following interactive charts use illustrative example
+        values to demonstrate common EDA visualizations.
+        They must not be interpreted as verified global data.
+    </p>
+
+    <div class="stats">
+        <div class="stat">
+            <strong>5</strong>
+            <span>Example Countries</span>
+        </div>
+        <div class="stat">
+            <strong>5</strong>
+            <span>Energy Categories</span>
+        </div>
+        <div class="stat">
+            <strong>5</strong>
+            <span>Example Years</span>
+        </div>
+        <div class="stat">
+            <strong>EDA</strong>
+            <span>Analysis Method</span>
+        </div>
+    </div>
+
+    <div class="chart-grid">
+
+        <div class="chart-box">
+            <h3>Chart 1: Energy Generation by Country</h3>
+            <canvas id="countryChart"></canvas>
+            <p class="note">
+                Demonstrates how a bar chart compares country-level
+                values in an illustrative example.
+            </p>
+        </div>
+
+        <div class="chart-box">
+            <h3>Chart 2: Example Renewable Energy Trend</h3>
+            <canvas id="trendChart"></canvas>
+            <p class="note">
+                Demonstrates how a line chart can display changes
+                across years.
+            </p>
+        </div>
+
+        <div class="chart-box">
+            <h3>Chart 3: Illustrative Energy Mix</h3>
+            <canvas id="mixChart"></canvas>
+            <p class="note">
+                Demonstrates the composition of an example energy mix.
+            </p>
+        </div>
+
+        <div class="chart-box">
+            <h3>Chart 4: Example Energy Source Comparison</h3>
+            <canvas id="sourceChart"></canvas>
+            <p class="note">
+                Demonstrates comparison of different energy categories.
+            </p>
+        </div>
+
+    </div>
+</section>
+
+<!-- 12. PYTHON CODE -->
+
+<section class="card" id="python">
+    <h2>12. Python Program for EDA</h2>
+
+    <p>
+        The following program demonstrates how to load a CSV dataset,
+        clean data, calculate statistics and generate visualizations.
+    </p>
+
+    <div class="highlight">
+        <strong>Before running the program:</strong>
+        Download a real dataset and prepare a CSV file with these
+        columns: Country, Year, Solar_TWh, Wind_TWh, Hydro_TWh,
+        Biomass_TWh and Geothermal_TWh.
+        Save the file as <code>global_renewable_energy.csv</code>
+        in the same working folder as the Python program.
+        If the downloaded dataset has different column names,
+        update the program accordingly.
+    </div>
+
+<pre><code># Exploratory Data Analysis of Renewable Energy
+
+# 1. Import required libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# 2. Load the dataset
+df = pd.read_csv("global_renewable_energy.csv")
+# 3. Display basic information
+print("First five records:")
+print(df.head())
+
+print("\nDataset shape:")
+print(df.shape)
+
+print("\nColumn information:")
+df.info()
+
+print("\nMissing values:")
+print(df.isnull().sum())
+
+
+# 4. Remove duplicate records
+df = df.drop_duplicates().copy()
+
+
+# 5. Convert columns to appropriate data types
+df["Year"] = pd.to_numeric(
+    df["Year"], errors="coerce"
+)
+
+energy_columns = [
+    "Solar_TWh",
+    "Wind_TWh",
+    "Hydro_TWh",
+    "Biomass_TWh",
+    "Geothermal_TWh"
+]
+
+for col in energy_columns:
+    df[col] = pd.to_numeric(
+        df[col], errors="coerce"
+    )
+
+
+# 6. Remove records without essential fields
+df = df.dropna(
+    subset=["Country", "Year"]
+).copy()
+
+
+# 7. Display cleaned data information
+print("\nCleaned dataset shape:")
+print(df.shape)
+
+print("\nMissing values after initial cleaning:")
+print(df.isnull().sum())
+
+
+# 8. Calculate descriptive statistics
+print("\nDescriptive Statistics:")
+print(df[energy_columns].describe())
+
+
+# 9. Calculate mean and median
+print("\nMean values:")
+print(df[energy_columns].mean())
+
+print("\nMedian values:")
+print(df[energy_columns].median())
+
+
+# 10. Compare energy sources
+source_totals = df[energy_columns].sum()
+
+print("\nTotal values by energy source:")
+print(source_totals)
+
+source_totals.plot(
+    kind="bar",
+    figsize=(9, 5),
+    title="Renewable Energy Source Comparison"
+)
+
+plt.xlabel("Energy Source")
+plt.ylabel("Sum of Recorded Values")
+plt.tight_layout()
+plt.show()
+
+
+# 11. Compare countries
+country_totals = df.groupby("Country")[
+    energy_columns
+].sum().sum(axis=1)
+
+top_countries = country_totals.sort_values(
+    ascending=False
+).head(10)
+
+print("\nCountries with highest recorded totals:")
+print(top_countries)
+
+top_countries.plot(
+    kind="bar",
+    figsize=(10, 5),
+    title="Top Countries by Recorded Renewable Energy"
+)
+
+plt.xlabel("Country")
+plt.ylabel("Sum of Recorded Values")
+plt.tight_layout()
+plt.show()
+
+
+# 12. Study trends over time
+yearly_totals = df.groupby("Year")[
+    energy_columns
+].sum()
+
+yearly_totals.plot(
+    kind="line",
+    marker="o",
+    figsize=(10, 5),
+    title="Renewable Energy Trends Over Time"
+)
+
+plt.xlabel("Year")
+plt.ylabel("Sum of Recorded Values")
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+
+# 13. Correlation analysis
+correlation = df[energy_columns].corr()
+
+print("\nCorrelation matrix:")
+print(correlation)
+
+plt.figure(figsize=(8, 6))
+
+sns.heatmap(
+    correlation,
+    annot=True,
+    cmap="YlGnBu",
+    fmt=".2f"
+)
+
+plt.title("Correlation Between Energy Sources")
+plt.tight_layout()
+plt.show()
+
+
+# 14. Final summary
+print("\nEDA completed successfully.")
+print("Interpret results using the actual dataset.")
+</code></pre>
+
+<p class="note">
+    This Python program is displayed for reference.
+    Run it in Google Colab or Jupyter Notebook with a
+    compatible dataset to generate actual results.
+</p>
+</section>
+
+
+<!-- 13. FINDINGS -->
+<section class="card" id="findings">
+    <h2>13. Findings and Observations</h2>
+
+    <p>
+        The following observations should be completed after
+        running the Python program on the actual dataset.
+    </p>
+
+    <ol>
+        <li>Identify the countries with the highest recorded generation.</li>
+        <li>Compare the recorded values for different energy sources.</li>
+        <li>Study changes in generation over the available years.</li>
+        <li>Examine relationships between numerical variables.</li>
+        <li>Report missing values and duplicate records.</li>
+    </ol>
+
+    <div class="highlight">
+        The final findings must come from the actual dataset.
+        Do not treat illustrative website charts as real statistics.
+    </div>
+</section>
+
+
+<!-- 14. ADVANTAGES AND LIMITATIONS -->
+<section class="card" id="limitations">
+    <h2>14. Advantages and Limitations</h2>
+
+    <h3>Advantages</h3>
+    <ul>
+        <li>Organizes and summarizes large datasets.</li>
+        <li>Identifies patterns through visualizations.</li>
+        <li>Supports comparisons between countries and years.</li>
+        <li>Introduces practical Python data-analysis techniques.</li>
+        <li>Helps identify data-quality problems.</li>
+    </ul>
+
+    <h3>Limitations</h3>
+    <ul>
+        <li>Results depend on dataset quality.</li>
+        <li>Missing data can affect comparisons.</li>
+        <li>Different units may make comparisons difficult.</li>
+        <li>Correlation does not prove causation.</li>
+        <li>Exploratory analysis alone cannot reliably predict the future.</li>
+    </ul>
+</section>
+
+
+<!-- 15. FUTURE SCOPE -->
+<section class="card" id="future">
+    <h2>15. Future Scope</h2>
+
+    <p>
+        This project can be extended to provide deeper insights
+        into renewable energy generation.
+    </p>
+
+    <ul>
+        <li>Include more countries and years in the dataset.</li>
+        <li>Compare renewable and non-renewable energy.</li>
+        <li>Analyze solar, wind and hydroelectric energy separately.</li>
+        <li>Create interactive dashboards using visualization tools.</li>
+        <li>Explore machine learning for energy trend forecasting.</li>
+        <li>Study the relationship between energy generation and emissions.</li>
+    </ul>
+</section>
+
+
+<!-- 16. CONCLUSION -->
+<section class="card" id="conclusion">
+    <h2>16. Conclusion</h2>
+
+    <p>
+        This project demonstrates the importance of Exploratory
+        Data Analysis in understanding renewable energy trends.
+        Python libraries such as Pandas, NumPy, Matplotlib and
+        Seaborn provide useful tools for cleaning, analyzing and
+        visualizing data.
+    </p>
+
+    <p>
+        Statistical analysis summarizes numerical information,
+        while charts make comparisons and patterns easier to
+        understand. These methods help researchers explore
+        differences between countries, energy sources and years.
+    </p>
+
+    <p>
+        The reliability of the conclusions depends on the quality
+        of the dataset and the correctness of the analysis.
+        Using authentic data and interpreting results carefully
+        are essential for meaningful findings.
+    </p>
+
+    <div class="highlight">
+        <strong>Data Today, Greener Tomorrow!</strong><br>
+        Explore Data. Discover Patterns. Support Sustainability.
+    </div>
+</section>
+
+
+<!-- 17. REFERENCES -->
+<section class="card" id="references">
+    <h2>17. References</h2>
+
+    <ol>
+        <li>
+            Our World in Data — Renewable Energy<br>
+            <a href="https://ourworldindata.org/Hello Claude! I need you to prepare my FINAL EDA MINI PROJECT REPORT as a downloadable PDF for my college submission tomorrow.
+
+Please read all the instructions carefully and create the complete report. I do not want only an outline or instructions. I need the actual finished PDF file.
+
+1. STUDENT DETAILS
+
+Student Name: S. Pravanjana Kasthuri
+Register Number: 951025243014
+Department: B.Tech Artificial Intelligence and Data Science
+College Name: Infant Jesus College of Engineering
+
+2. PROJECT TITLE
+
+EXPLORATORY DATA ANALYSIS OF GLOBAL RENEWABLE ENERGY TRENDS USING PYTHON
+
+3. MY CURRENT PROJECT
+
+I have already created a website for this project using HTML, CSS and JavaScript.
+
+My website contains:
+
+- Cover
+- Abstract
+- Introduction
+- Objectives
+- Dataset
+- Methodology
+- Analysis
+- Charts
+- Python Code
+- Findings
+- Conclusion
+- References
+
+The website includes charts created with JavaScript Chart.js. Some chart values are directly written in the JavaScript code, such as:
+
+Solar trend example: [20, 28, 39, 53, 70]
+
+Energy mix example: [25, 24, 32, 13, 6]
+
+I have not yet verified whether these values came from an actual dataset. Therefore, do not present these values as verified real-world statistics.
+
+4. WHAT I NEED FROM YOU
+
+Prepare a professional, complete, college-level PDF report that matches my existing website and project topic.
+
+Include these sections:
+
+1. Title Page
+2. Abstract
+3. Introduction
+4. Problem Statement
+5. Objectives
+6. Scope of the Project
+7. Dataset Description
+8. Tools and Technologies
+9. System Requirements
+10. Methodology
+11. Data Preprocessing and Cleaning
+12. Exploratory Data Analysis
+13. Python Program
+14. Explanation of the Program
+15. Charts and Visualizations
+16. Results and Findings
+17. Limitations
+18. Future Scope
+19. Conclusion
+20. References
+
+5. PDF DESIGN
+
+- White background with dark green headings.
+- Professional engineering college project-report style.
+- Attractive title page.
+- Correct student details on the title page.
+- Bold headings and subheadings.
+- Clear paragraph spacing and readable fonts.
+- Page numbers.
+- Neat tables and charts where appropriate.
+- Python code with proper indentation and readable formatting.
+- Good-quality formatting suitable for printing and submission.
+- Avoid unnecessary blank pages and excessive decoration.
+
+Make the report detailed enough for an engineering college mini project, but do not add irrelevant content just to increase the page count.
+
+6. DATA ACCURACY — VERY IMPORTANT
+
+Use this trustworthy source as a starting point:
+https://ourworldindata.org/renewable-energy
+
+If you can access and verify a real renewable-energy dataset, use it for the analysis. Ensure that the Python code matches the actual dataset columns and that all reported results are calculated from the data.
+
+If you cannot verify or download a real dataset, do not invent statistics or pretend that the analysis has been performed. Clearly label demonstration values and charts as illustrative examples. Explain which parts still require actual dataset analysis.
+
+Do not claim that Python code has been executed unless it has genuinely been run.
+
+7. PYTHON CODE
+
+Include a complete, understandable Python program using suitable libraries such as:
+
+- Pandas
+- NumPy
+- Matplotlib
+- Seaborn
+
+The program should cover:
+
+- Loading the dataset
+- Inspecting rows and columns
+- Checking missing values
+- Checking duplicate rows
+- Descriptive statistics
+- Suitable visualizations
+- Interpreting results based on actual outputs
+
+Make sure the program is appropriate for the chosen dataset. Do not assume column names without checking the dataset.
+
+8. FINAL OUTPUT
+
+My deadline is tomorrow, so please prioritise completing the report.
+
+First, create the downloadable PDF file directly if file creation is supported.
+
+If you cannot create a PDF directly, provide a complete, formatted document that I can easily save as PDF.
+
+Also tell me briefly whether the report uses real dataset results or illustrative sample values, so I know what I am submitting.
+
+Please double-check the spelling of my name, register number, department and college name before generating the final PDF.-energy"
+               target="_blank" rel="noopener">
+                https://ourworldindata.org/renewable-energy
+            </a>
+        </li>
+
+        <li>
+            Pandas Documentation<br>
+            <a href="https://pandas.pydata.org/docs/"
+               target="_blank" rel="noopener">
+                https://pandas.pydata.org/docs/
+            </a>
+        </li>
+
+        <li>
+            NumPy Documentation<br>
+            <a href="https://numpy.org/doc/"
+               target="_blank" rel="noopener">
+                https://numpy.org/doc/
+            </a>
+        </li>
+
+        <li>
+            Matplotlib Documentation<br>
+            <a href="https://matplotlib.org/stable/"
+               target="_blank" rel="noopener">
+                https://matplotlib.org/stable/
+            </a>
+        </li>
+
+        <li>
+            Seaborn Documentation<br>
+            <a href="https://seaborn.pydata.org/"
+               target="_blank" rel="noopener">
+                https://seaborn.pydata.org/
+            </a>
+        </li>
+    </ol>
+</section>
+
+</main>
+
+
+<!-- FOOTER -->
+<footer>
+    <h2>🌍 Data Today, Greener Tomorrow 🌱</h2>
+    <p>EDA Mini Project</p>
+    <p>Artificial Intelligence and Data Science</p>
+    <p>Explore Data • Discover Patterns • Support Sustainability</p>
+</footer>
+
+
+<!-- CHARTS -->
+<script>
+/*
+Illustrative example values only.
+These are not verified global statistics.
+*/
+
+const countries = [
+    "Country A",
+    "Country B",
+    "Country C",
+    "Country D",
+    "Country E"
+];
+
+
+// Chart 1: Country Comparison
+new Chart(document.getElementById("countryChart"), {
+    type: "bar",
+
+    data: {
+        labels: countries,
+
+        datasets: [{
+            label: "Illustrative Index",
+            data: [85, 72, 64, 53, 45],
+
+            backgroundColor: [
+                "#18866c",
+                "#42a98c",
+                "#78c8a8",
+                "#f4bd66",
+                "#80a8df"
+            ]
+        }]
+    },
+
+    options: {
+        responsive: true,
+
+        plugins: {
+            legend: {
+                display: false
+            }
+        },
+
+        scales: {
+            y: {
+                beginAtZero: true,
+
+                title: {
+                    display: true,
+                    text: "Example index (not TWh)"
+                }
+            }
+        }
+    }
+});
+
+
+// Chart 2: Renewable Energy Trend
+new Chart(document.getElementById("trendChart"), {
+    type: "line",
+
+    data: {
+        labels: ["2019", "2020", "2021", "2022", "2023"],
+
+        datasets: [
+            {
+                label: "Solar",
+                data: [20, 28, 39, 53, 70],
+                borderColor: "#f0a42d",
+                backgroundColor: "#f0a42d",
+                tension: 0.3
+            },
+
+            {
+                label: "Wind",
+                data: [32, 36, 43, 48, 59],
+                borderColor: "#168a79",
+                backgroundColor: "#168a79",
+                tension: 0.3
+            },
+
+            {
+                label: "Hydro",
+                data: [60, 62, 61, 65, 66],
+                borderColor: "#5488d7",
+                backgroundColor: "#5488d7",
+                tension: 0.3
+            }
+        ]
+    },
+
+    options: {
+        responsive: true,
+
+        scales: {
+            y: {
+                beginAtZero: true,
+
+                title: {
+                    display: true,
+                    text: "Illustrative index"
+                }
+            }
+        }
+    }
+});
+
+
+// Chart 3: Energy Mix
+new Chart(document.getElementById("mixChart"), {
+    type: "doughnut",
+
+    data: {
+        labels: [
+            "Solar",
+            "Wind",
+            "Hydro",
+            "Biomass",
+            "Geothermal"
+        ],
+
+        datasets: [{
+            data: [25, 24, 32, 13, 6],
+
+            backgroundColor: [
+                "#f3bd56",
+                "#4da998",
+                "#6194dc",
+                "#9c83cf",
+                "#ef8e75"
+            ]
+        }]
+    },
+
+    options: {
+        responsive: true,
+
+        plugins: {
+            legend: {
+                position: "bottom"
+            }
+        }
+    }
+});
+
+
+// Chart 4: Energy Source Comparison
+new Chart(document.getElementById("sourceChart"), {
+    type: "bar",
+
+    data: {
+        labels: [
+            "Solar",
+            "Wind",
+            "Hydro",
+            "Biomass",
+            "Geothermal"
+        ],
+
+        datasets: [{
+            label: "Illustrative Index",
+            data: [68, 59, 83, 31, 18],
+            backgroundColor: "#329b7c"
+        }]
+    },
+
+    options: {
+        indexAxis: "y",
+        responsive: true,
+
+        plugins: {
+            legend: {
+                display: false
+            }
+        },
+
+        scales: {
+            x: {
+                beginAtZero: true,
+
+                title: {
+                    display: true,
+                    text: "Example index (not TWh)"
+                }
+            }
+        }
+    }
+});
+</script>
+
+
+</body>
+</html>
